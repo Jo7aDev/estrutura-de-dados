@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <string.h>
+
+// Estrutura para armazenar informações de um filme
+struct Filme {
+    char titulo[100];
+    int classificacao;
+    char diretor[100];
+    char genero[50];
+    char duracao[20];
+};
+
+// Função para preencher os dados de um filme usando ponteiros
+void preencherFilme(struct Filme *filme) {
+    printf("Título do filme: ");
+    fgets(filme->titulo, sizeof(filme->titulo), stdin);
+
+    printf("Classificação: ");
+    scanf("%d", &filme->classificacao);
+    getchar();
+
+    printf("Diretor: ");
+    fgets(filme->diretor, sizeof(filme->diretor), stdin);
+
+    printf("Gênero: ");
+    fgets(filme->genero, sizeof(filme->genero), stdin);
+
+    printf("Duração: ");
+    fgets(filme->duracao, sizeof(filme->duracao), stdin);
+}
+
+int main(void) {
+    struct Filme meuFilme;
+
+    printf("Cadastro de Filme\n");
+    preencherFilme(&meuFilme);
+
+    printf("\nDados do Filme:\n");
+    printf("Título: %s", meuFilme.titulo);
+    printf("Classificação: %d\n", meuFilme.classificacao);
+    printf("Diretor: %s", meuFilme.diretor);
+    printf("Gênero: %s", meuFilme.genero);
+    printf("Duração: %s", meuFilme.duracao);
+
+    return 0;
+}
