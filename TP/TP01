@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct {
+    char nome[50];
+    char telefone[20];
+    char curso[50];
+    float nota1;
+    float nota2;
+} Aluno;
+
+float calcularMedia(float nota1, float nota2) {
+    return (nota1 + nota2) / 2.0;
+}
+
+char *determinarSituacao(float media) {
+    return (media >= 7.0) ? "APROVADO" : "REPROVADO";
+}
+
+int main() {
+    FILE *entrada = fopen("DadosEntrada.csv", "r");
+    FILE *saida = fopen("SituacaoFinal.csv", "w");
+
+    if (entrada == NULL || saida == NULL) {
+        perror("Erro ao abrir os arquivos.");
+        return 1;
+    }
+
+    fprintf(saida, "Nome,Media,Situacao\n");
+
+    char linha[256];
+    fgets(linha, sizeof(linha), entrada);
+
+    while (fgets(linha, sizeof(linha), entrada) != NULL) {
+        Aluno aluno;
+        sscanf(linha, "%[^,],%[^,],%[^,],%f,%f", aluno.nome, aluno.telefone, aluno.curso, &aluno.nota1, &aluno.nota2);
+
+        float media = calcularMedia(aluno.nota1, aluno.nota2);
+
+        char *situacao = determinarSituacao(media);
+
+        fprintf(saida, "%s,%.2f,%s\n", aluno.nome, media, situacao);
+    }
+
+    fclose(entrada);
+    fclose(saida);
+
+    printf("Processamento concluído. Os resultados foram salvos em SituacaoFinal.csv.\n");
+
+    return 0;
+}
