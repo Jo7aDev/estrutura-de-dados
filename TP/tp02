@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <string.h>
+
+void custom_swap(char **a, char **b) {
+    char *temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int custom_partition(char *arr[], int low, int high) {
+    char *pivot = arr[high];
+    int i = (low - 1);
+
+    for (int j = low; j <= high - 1; j++) {
+        if (strcmp(arr[j], pivot) < 0) {
+            i++;
+            custom_swap(&arr[i], &arr[j]);
+        }
+    }
+    custom_swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+void custom_quicksort(char *arr[], int low, int high) {
+    if (low < high) {
+        int pivot_index = custom_partition(arr, low, high);
+
+        custom_quicksort(arr, low, pivot_index - 1);
+        custom_quicksort(arr, pivot_index + 1, high);
+    }
+}
+
+int main() {
+    char *words[20] = {
+        "apple", "banana", "pear", "grape", "orange", "pineapple", "lemon", "mango", "avocado", "kiwi",
+        "cherry", "strawberry", "peach", "guava", "watermelon", "raspberry", "blackberry", "persimmon", "fig", "papaya"
+    };
+
+    int n = sizeof(words) / sizeof(words[0]);
+
+    int comparisons = 0;
+    int swaps = 0;
+
+    custom_quicksort(words, 0, n - 1);
+
+    printf("Sorted Words:\n");
+    for (int i = 0; i < n; i++) {
+        printf("%s ", words[i]);
+    }
+
+    printf("\n");
+
+    printf("Number of comparisons: %d\n", comparisons);
+    printf("Number of swaps: %d\n", swaps);
+
+    FILE *outputFile;
+    outputFile = fopen("sorted_words.txt", "w");
+    if (outputFile == NULL) {
+        printf("Error opening output file.\n");
+        return 1;
+    }
+
+    for (int i = 0; i < n; i++) {
+        fprintf(outputFile, "%s ", words[i]);
+    }
+
+    fclose(outputFile);
+
+    if (n % 2 == 1) {
+        printf("Median: %s\n", words[n / 2]);
+    } else {
+        printf("Median: %s and %s\n", words[(n - 1) / 2], words[n / 2]);
+    }
+
+    return 0;
+}
